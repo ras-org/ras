@@ -1,0 +1,203 @@
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+
+class Groups_model extends BF_Model
+{
+    protected $table_name	= 'ra_groups';
+ protected $user_groups_table_name	= 'ra_user_groups';
+	protected $key			= 'id';
+	protected $date_format	= 'datetime';
+
+	protected $log_user 	= true;
+	protected $set_created	= true;
+	protected $set_modified = true;
+	protected $soft_deletes	= true;
+
+	protected $created_field     = 'created_on';
+    protected $created_by_field  = 'created_by';
+	protected $modified_field    = 'updated_on';
+    protected $modified_by_field = 'updated_by';
+    protected $deleted_field     = 'deleted';
+    protected $deleted_by_field  = 'deleted_by';
+
+	// Customize the operations of the model without recreating the insert,
+    // update, etc. methods by adding the method names to act as callbacks here.
+	protected $before_insert 	= array();
+	protected $after_insert 	= array();
+	protected $before_update 	= array();
+	protected $after_update 	= array();
+	protected $before_find 	    = array();
+	protected $after_find 		= array();
+	protected $before_delete 	= array();
+	protected $after_delete 	= array();
+
+	// For performance reasons, you may require your model to NOT return the id
+	// of the last inserted row as it is a bit of a slow method. This is
+    // primarily helpful when running big loops over data.
+	protected $return_insert_id = true;
+
+	// The default type for returned row data.
+	protected $return_type = 'object';
+
+	// Items that are always removed from data prior to inserts or updates.
+	protected $protected_attributes = array();
+
+	// You may need to move certain rules (like required) into the
+	// $insert_validation_rules array and out of the standard validation array.
+	// That way it is only required during inserts, not updates which may only
+	// be updating a portion of the data.
+	protected $validation_rules 		= array(
+		array(
+			'field' => 'group_name',
+			'label' => 'lang:groups_field_group_name',
+			'rules' => 'required|trim|max_length[250]',
+		),
+		array(
+			'field' => 'group_type',
+			'label' => 'lang:groups_field_group_type',
+			'rules' => 'required|max_length[3]',
+		),
+		array(
+			'field' => 'email',
+			'label' => 'lang:groups_field_group_email',
+			'rules' => 'required|trim|valid_email|max_length[100]',
+		),
+		array(
+			'field' => 'group_mode',
+			'label' => 'lang:groups_field_group_mode',
+			'rules' => 'max_length[4]',
+		),
+		array(
+			'field' => 'logo',
+			'label' => 'lang:groups_field_logo',
+			'rules' => 'max_length[100]',
+		),
+		array(
+			'field' => 'mobile',
+			'label' => 'lang:groups_field_mobile',
+			'rules' => 'required|max_length[15]',
+		),
+		array(
+			'field' => 'land_line',
+			'label' => 'lang:groups_field_land_line',
+			'rules' => 'max_length[20]',
+		),
+		array(
+			'field' => 'mission',
+			'label' => 'lang:groups_field_mission',
+			'rules' => 'max_length[5000]',
+		),
+		array(
+			'field' => 'longitude',
+			'label' => 'lang:groups_field_longitude',
+			'rules' => 'max_length[10]',
+		),
+		array(
+			'field' => 'latitude',
+			'label' => 'lang:groups_field_latitude',
+			'rules' => 'max_length[10]',
+		),
+		array(
+			'field' => 'started_on',
+			'label' => 'lang:groups_field_started_on',
+			'rules' => '',
+		),
+		array(
+			'field' => 'address',
+			'label' => 'lang:groups_field_address',
+			'rules' => 'required|max_length[250]',
+		),
+		array(
+			'field' => 'city',
+			'label' => 'lang:groups_field_city',
+			'rules' => 'required|max_length[100]',
+		),
+		array(
+			'field' => 'district',
+			'label' => 'lang:groups_field_district',
+			'rules' => 'required|max_length[11]',
+		),
+		array(
+			'field' => 'state',
+			'label' => 'lang:groups_field_state',
+			'rules' => 'required|max_length[11]',
+		),
+		array(
+			'field' => 'country',
+			'label' => 'lang:groups_field_country',
+			'rules' => 'required|max_length[11]',
+		),
+		array(
+			'field' => 'group_code',
+			'label' => 'lang:groups_field_group_code',
+			'rules' => 'max_length[100]',
+		),
+		array(
+			'field' => 'status',
+			'label' => 'lang:groups_field_status',
+			'rules' => 'max_length[3]',
+		),
+		array(
+			'field' => 'deleted',
+			'label' => 'lang:groups_field_deleted',
+			'rules' => 'max_length[4]',
+		),
+		array(
+			'field' => 'deleted_by',
+			'label' => 'lang:groups_field_deleted_by',
+			'rules' => 'max_length[20]',
+		),
+		array(
+			'field' => 'banned',
+			'label' => 'lang:groups_field_banned',
+			'rules' => 'max_length[1]',
+		),
+		array(
+			'field' => 'created_on',
+			'label' => 'lang:groups_field_created_on',
+			'rules' => '',
+		),
+		array(
+			'field' => 'created_by',
+			'label' => 'lang:groups_field_created_by',
+			'rules' => 'max_length[20]',
+		),
+		array(
+			'field' => 'updated_on',
+			'label' => 'lang:groups_field_updated_on',
+			'rules' => '',
+		),
+		array(
+			'field' => 'updated_by',
+			'label' => 'lang:groups_field_updated_by',
+			'rules' => 'max_length[10]',
+		),
+	);
+	protected $insert_validation_rules = array(
+		array(
+		    'field' => 'password',
+		    'label' => 'lang:groups_field_password',
+		    'rules' => 'min_length[8]|max_length[120]|valid_password|matches[pass_confirm]'
+		),
+		array(
+		    'field' => 'pass_confirm',
+		    'label' => 'lang:groups_field_password_confirm',
+		    'rules' => 'required',
+		),
+	    );
+	protected $skip_validation 			= false;
+
+    /**
+     * Constructor
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function insert_member_group($data) {
+	$result = $this->db->insert($this->user_groups_table_name, $data);
+	return $result;
+   }
+}
